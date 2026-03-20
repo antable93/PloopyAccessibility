@@ -57,36 +57,6 @@
 #    define DIGITIZER_MOUSE_SWIPE_THRESHOLD 100
 #endif
 
-/** Cursor speed multiplier for absolute digitizer reports (trackpad mode). 1.0f = no change, 0.5f = half, 2.0f = double. Override in config.h. */
-#ifndef DIGITIZER_SENSITIVITY
-#    define DIGITIZER_SENSITIVITY 0.05f
-#endif
-
-#ifndef DIGITIZER_SENSITIVITY_MIN
-#    define DIGITIZER_SENSITIVITY_MIN 0.03f
-#endif
-
-#ifndef DIGITIZER_SENSITIVITY_MAX
-#    define DIGITIZER_SENSITIVITY_MAX 2.0f
-#endif
-
-/** Runtime sensitivity (DIGITIZER_SENSITIVITY_MIN–MAX). VIA slider uses 0–100. */
-static float digitizer_sensitivity_value = DIGITIZER_SENSITIVITY;
-
-void digitizer_set_sensitivity(uint8_t value_0_100) {
-    if (value_0_100 > 100) value_0_100 = 100;
-    float range = DIGITIZER_SENSITIVITY_MAX - DIGITIZER_SENSITIVITY_MIN;
-    digitizer_sensitivity_value = DIGITIZER_SENSITIVITY_MIN + ((float)value_0_100 / 100.0f) * range;
-}
-
-uint8_t digitizer_get_sensitivity(void) {
-    float range = DIGITIZER_SENSITIVITY_MAX - DIGITIZER_SENSITIVITY_MIN;
-    float v     = (digitizer_sensitivity_value - DIGITIZER_SENSITIVITY_MIN) / range * 100.0f;
-    if (v < 0.0f) v = 0.0f;
-    if (v > 100.0f) v = 100.0f;
-    return (uint8_t)(v + 0.5f);
-}
-
 #if defined(DIGITIZER_LEFT) || defined(DIGITIZER_RIGHT)
 #    ifndef SPLIT_DIGITIZER_ENABLE
 #        error "Using DIGITIZER_LEFT or DIGITIZER_RIGHT, then SPLIT_DIGITIZER_ENABLE is required but has not been defined"
@@ -238,7 +208,6 @@ __attribute__((weak)) digitizer_t digitizer_task_kb(digitizer_t digitizer_state)
 }
 
 void digitizer_init(void) {
-    digitizer_sensitivity_value = DIGITIZER_SENSITIVITY;
 #if defined(SPLIT_DIGITIZER_ENABLE)
     if (!(DIGITIZER_THIS_SIDE)) return;
 #endif
@@ -488,52 +457,21 @@ bool digitizer_task(void) {
                 report.fingers[finger_index].tip = false;
             }
             report.fingers[finger_index].contact_id = i;
-            {
-                const float   cx   = (float)(DIGITIZER_RESOLUTION_X / 2);
-                const float   cy   = (float)(DIGITIZER_RESOLUTION_Y / 2);
-                float        sx   = cx + ((float)tmp_state.contacts[i].x - cx) * digitizer_sensitivity_value;
-                float        sy   = cy + ((float)tmp_state.contacts[i].y - cy) * digitizer_sensitivity_value;
-                int32_t      ix   = (int32_t)(sx + 0.5f);
-                int32_t      iy   = (int32_t)(sy + 0.5f);
-                if (ix < 0) ix = 0;
-                if (ix > (int32_t)(DIGITIZER_RESOLUTION_X - 1)) ix = DIGITIZER_RESOLUTION_X - 1;
-                if (iy < 0) iy = 0;
-                if (iy > (int32_t)(DIGITIZER_RESOLUTION_Y - 1)) iy = DIGITIZER_RESOLUTION_Y - 1;
-                report.fingers[finger_index].x = (uint16_t)ix;
-                report.fingers[finger_index].y = (uint16_t)iy;
-            }
+            report.fingers[finger_index].x          = tmp_state.contacts[i].x;
+            report.fingers[finger_index].y          = tmp_state.contacts[i].y;
             report.fingers[finger_index].confidence = tmp_state.contacts[i].confidence;
 #ifdef DIGITIZER_HAS_STYLUS
             if (tmp_state.contacts[i].type == STYLUS) {
-                updated_stylus = true;
-                const float   cx = (float)(DIGITIZER_RESOLUTION_X / 2);
-                const float   cy = (float)(DIGITIZER_RESOLUTION_Y / 2);
-                float        sx = cx + ((float)tmp_state.contacts[i].x - cx) * digitizer_sensitivity_value;
-                float        sy = cy + ((float)tmp_state.contacts[i].y - cy) * digitizer_sensitivity_value;
-                int32_t      ix = (int32_t)(sx + 0.5f);
-                int32_t      iy = (int32_t)(sy + 0.5f);
-                if (ix < 0) ix = 0;
-                if (ix > (int32_t)(DIGITIZER_RESOLUTION_X - 1)) ix = DIGITIZER_RESOLUTION_X - 1;
-                if (iy < 0) iy = 0;
-                if (iy > (int32_t)(DIGITIZER_RESOLUTION_Y - 1)) iy = DIGITIZER_RESOLUTION_Y - 1;
-                stylus_report.x = (uint16_t)ix;
-                stylus_report.y = (uint16_t)iy;
+                updated_stylus         = true;
+                stylus_report.x        = tmp_state.contacts[i].x;
+                stylus_report.y        = tmp_state.contacts[i].y;
                 stylus_report.tip      = tmp_state.contacts[i].tip;
                 stylus_report.in_range = tmp_state.contacts[i].in_range;
             } else if (digitizer_state.contacts[i].type == STYLUS) {
-                updated_stylus = true;
-                const float   cx = (float)(DIGITIZER_RESOLUTION_X / 2);
-                const float   cy = (float)(DIGITIZER_RESOLUTION_Y / 2);
-                float        sx = cx + ((float)digitizer_state.contacts[i].x - cx) * digitizer_sensitivity_value;
-                float        sy = cy + ((float)digitizer_state.contacts[i].y - cy) * digitizer_sensitivity_value;
-                int32_t      ix = (int32_t)(sx + 0.5f);
-                int32_t      iy = (int32_t)(sy + 0.5f);
-                if (ix < 0) ix = 0;
-                if (ix > (int32_t)(DIGITIZER_RESOLUTION_X - 1)) ix = DIGITIZER_RESOLUTION_X - 1;
-                if (iy < 0) iy = 0;
-                if (iy > (int32_t)(DIGITIZER_RESOLUTION_Y - 1)) iy = DIGITIZER_RESOLUTION_Y - 1;
-                stylus_report.x = (uint16_t)ix;
-                stylus_report.y = (uint16_t)iy;
+                // Drop the tip, then drop out of range next scan
+                updated_stylus         = true;
+                stylus_report.x        = digitizer_state.contacts[i].x;
+                stylus_report.y        = digitizer_state.contacts[i].y;
                 stylus_report.in_range = false;
                 stylus_report.tip      = false;
             }
@@ -571,7 +509,7 @@ bool digitizer_task(void) {
             host_mouse_send(&mouse_report);
 #    endif
         }
-        else 
+        else
 #endif
         {
             host_digitizer_send(&report);

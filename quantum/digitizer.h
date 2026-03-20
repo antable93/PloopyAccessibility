@@ -89,16 +89,6 @@ __attribute__((weak)) digitizer_t digitizer_task_user(digitizer_t digitizer_stat
 __attribute__((weak)) digitizer_t digitizer_task_kb(digitizer_t digitizer_state);
 
 /**
- * \brief Set cursor sensitivity from VIA-style 0–100 (maps to DIGITIZER_SENSITIVITY_MIN–MAX).
- */
-void digitizer_set_sensitivity(uint8_t value_0_100);
-
-/**
- * \brief Get current sensitivity as 0–100 for VIA.
- */
-uint8_t digitizer_get_sensitivity(void);
-
-/**
  * \brief Initializes the digitizer feature.
  */
 void digitizer_init(void);

@@ -32,7 +32,6 @@
 #include "timer.h"
 #include "wait.h"
 #include "version.h" // for QMK_BUILDDATE used in EEPROM magic
-#include "bootloader.h"
 
 #if defined(AUDIO_ENABLE)
 #    include "audio.h"
@@ -393,12 +392,6 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
             via_eeprom_set_valid(false);
             eeconfig_init_via();
             break;
-        }
-#endif
-#ifdef VIA_YES_I_UNDERSTAND_THIS_IS_AN_ATTACK_VECTOR
-        case id_bootloader_jump: {
-            bootloader_jump();
-            return; // do not send response; device is resetting
         }
 #endif
         case id_dynamic_keymap_macro_get_count: {
