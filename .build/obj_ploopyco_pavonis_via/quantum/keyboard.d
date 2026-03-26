@@ -136,9 +136,9 @@
  quantum/sync_timer.h quantum/logging/print.h quantum/logging/sendchar.h \
  platforms/progmem.h lib/printf/src/printf/printf.h \
  quantum/logging/debug.h quantum/command.h quantum/action_layer.h \
- quantum/action.h quantum/mousekey.h \
+ quantum/action.h quantum/bootmagic/bootmagic.h quantum/mousekey.h \
  quantum/pointing_device/pointing_device.h quantum/digitizer.h \
- drivers/eeprom/eeprom_driver.h
+ quantum/via.h drivers/eeprom/eeprom_driver.h
 keyboards/ploopyco/pavonis/config.h:
 .build/obj_ploopyco_pavonis_via/src/info_config.h:
 keyboards/ploopyco/pavonis/keymaps/via/config.h:
@@ -311,7 +311,9 @@ quantum/logging/debug.h:
 quantum/command.h:
 quantum/action_layer.h:
 quantum/action.h:
+quantum/bootmagic/bootmagic.h:
 quantum/mousekey.h:
 quantum/pointing_device/pointing_device.h:
 quantum/digitizer.h:
+quantum/via.h:
 drivers/eeprom/eeprom_driver.h:

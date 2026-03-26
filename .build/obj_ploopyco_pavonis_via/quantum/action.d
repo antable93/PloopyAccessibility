@@ -143,10 +143,12 @@
  quantum/quantum_keycodes_legacy.h platforms/bootloader.h \
  quantum/sync_timer.h platforms/atomic_util.h \
  platforms/chibios/atomic_util.h platforms/suspend.h \
+ quantum/bootmagic/bootmagic.h \
  quantum/process_keycode/process_space_cadet.h \
  quantum/send_string/send_string.h \
- quantum/send_string/send_string_keycodes.h quantum/digitizer.h \
- quantum/pointing_device/pointing_device.h
+ quantum/send_string/send_string_keycodes.h quantum/dynamic_keymap.h \
+ quantum/digitizer.h quantum/via.h \
+ quantum/pointing_device/pointing_device.h quantum/tri_layer.h
 keyboards/ploopyco/pavonis/config.h:
 .build/obj_ploopyco_pavonis_via/src/info_config.h:
 keyboards/ploopyco/pavonis/keymaps/via/config.h:
@@ -337,8 +339,12 @@ quantum/sync_timer.h:
 platforms/atomic_util.h:
 platforms/chibios/atomic_util.h:
 platforms/suspend.h:
+quantum/bootmagic/bootmagic.h:
 quantum/process_keycode/process_space_cadet.h:
 quantum/send_string/send_string.h:
 quantum/send_string/send_string_keycodes.h:
+quantum/dynamic_keymap.h:
 quantum/digitizer.h:
+quantum/via.h:
 quantum/pointing_device/pointing_device.h:
+quantum/tri_layer.h:

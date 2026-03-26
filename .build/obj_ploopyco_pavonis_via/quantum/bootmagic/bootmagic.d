@@ -1,5 +1,5 @@
-.build/obj_ploopyco_pavonis_via/keyboards/ploopyco/pavonis/pavonis.o: \
- keyboards/ploopyco/pavonis/pavonis.c keyboards/ploopyco/pavonis/config.h \
+.build/obj_ploopyco_pavonis_via/quantum/bootmagic/bootmagic.o: \
+ quantum/bootmagic/bootmagic.c keyboards/ploopyco/pavonis/config.h \
  .build/obj_ploopyco_pavonis_via/src/info_config.h \
  keyboards/ploopyco/pavonis/keymaps/via/config.h \
  platforms/chibios/boards/GENERIC_PROMICRO_RP2040/configs/config.h \
@@ -19,8 +19,10 @@
  lib/pico-sdk/src/rp2040/hardware_regs/include/hardware/regs/sio.h \
  lib/pico-sdk/src/common/pico_base/include/pico/types.h \
  lib/pico-sdk/src/common/pico_base/include/pico/error.h \
- .build/obj_ploopyco_pavonis_via/src/default_keyboard.h quantum/quantum.h \
- platforms/chibios/platform_deps.h lib/chibios/os/hal/include/hal.h \
+ quantum/bootmagic/bootmagic.h quantum/matrix.h platforms/gpio.h \
+ platforms/pin_defs.h platforms/chibios/_pin_defs.h \
+ platforms/chibios/vendors/RP/_pin_defs.h platforms/chibios/gpio.h \
+ lib/chibios/os/hal/include/hal.h \
  lib/chibios/os/common/portability/GCC/ccportab.h \
  lib/chibios/os/hal/osal/rt-nil/osal.h lib/chibios/os/rt/include/ch.h \
  lib/chibios/os/license/chlicense.h lib/chibios/os/license/chversion.h \
@@ -123,33 +125,12 @@
  lib/chibios/os/hal/include/hal_st.h \
  lib/chibios/os/hal/ports/RP/LLD/TIMERv1/hal_st_lld.h \
  lib/chibios/os/hal/include/hal_mmc_spi.h \
- lib/chibios/os/hal/include/hal_serial_usb.h \
- platforms/chibios/chibios_config.h platforms/wait.h \
- platforms/chibios/_wait.h platforms/chibios/_wait.c quantum/matrix.h \
- platforms/gpio.h platforms/pin_defs.h platforms/chibios/_pin_defs.h \
- platforms/chibios/vendors/RP/_pin_defs.h platforms/chibios/gpio.h \
- quantum/keyboard.h platforms/timer.h platforms/chibios/_timer.h \
- quantum/keymap_common.h quantum/quantum_keycodes.h quantum/keycodes.h \
- quantum/keymap_extras/keymap_us.h quantum/sequencer/sequencer.h \
- quantum/quantum_keycodes_legacy.h quantum/keycode_config.h \
- quantum/eeconfig.h platforms/eeprom.h quantum/util.h quantum/bits.h \
- quantum/bitwise.h platforms/chibios/_util.h quantum/keycode.h \
- quantum/modifiers.h quantum/action_code.h quantum/action_layer.h \
- quantum/action.h platforms/progmem.h platforms/bootloader.h \
- quantum/sync_timer.h platforms/atomic_util.h \
- platforms/chibios/atomic_util.h tmk_core/protocol/host.h \
- tmk_core/protocol/report.h quantum/digitizer_driver.h \
- drivers/sensors/procyon.h tmk_core/protocol/host_driver.h quantum/led.h \
- quantum/action_util.h quantum/action_tapping.h quantum/logging/print.h \
- quantum/logging/sendchar.h lib/printf/src/printf/printf.h \
- quantum/logging/debug.h platforms/suspend.h \
- quantum/bootmagic/bootmagic.h \
- quantum/process_keycode/process_space_cadet.h \
- quantum/send_string/send_string.h \
- quantum/send_string/send_string_keycodes.h quantum/dynamic_keymap.h \
- quantum/digitizer.h quantum/via.h \
- quantum/pointing_device/pointing_device.h quantum/mousekey.h \
- quantum/tri_layer.h keyboards/ploopyco/ploopyco.h
+ lib/chibios/os/hal/include/hal_serial_usb.h quantum/keyboard.h \
+ platforms/timer.h platforms/chibios/_timer.h platforms/wait.h \
+ platforms/chibios/_wait.h platforms/chibios/chibios_config.h \
+ platforms/chibios/_wait.c quantum/eeconfig.h platforms/eeprom.h \
+ quantum/util.h quantum/bits.h quantum/bitwise.h \
+ platforms/chibios/_util.h platforms/bootloader.h
 keyboards/ploopyco/pavonis/config.h:
 .build/obj_ploopyco_pavonis_via/src/info_config.h:
 keyboards/ploopyco/pavonis/keymaps/via/config.h:
@@ -170,9 +151,13 @@ lib/pico-sdk/src/rp2040/hardware_regs/include/hardware/regs/addressmap.h:
 lib/pico-sdk/src/rp2040/hardware_regs/include/hardware/regs/sio.h:
 lib/pico-sdk/src/common/pico_base/include/pico/types.h:
 lib/pico-sdk/src/common/pico_base/include/pico/error.h:
-.build/obj_ploopyco_pavonis_via/src/default_keyboard.h:
-quantum/quantum.h:
-platforms/chibios/platform_deps.h:
+quantum/bootmagic/bootmagic.h:
+quantum/matrix.h:
+platforms/gpio.h:
+platforms/pin_defs.h:
+platforms/chibios/_pin_defs.h:
+platforms/chibios/vendors/RP/_pin_defs.h:
+platforms/chibios/gpio.h:
 lib/chibios/os/hal/include/hal.h:
 lib/chibios/os/common/portability/GCC/ccportab.h:
 lib/chibios/os/hal/osal/rt-nil/osal.h:
@@ -289,63 +274,17 @@ lib/chibios/os/hal/include/hal_st.h:
 lib/chibios/os/hal/ports/RP/LLD/TIMERv1/hal_st_lld.h:
 lib/chibios/os/hal/include/hal_mmc_spi.h:
 lib/chibios/os/hal/include/hal_serial_usb.h:
-platforms/chibios/chibios_config.h:
-platforms/wait.h:
-platforms/chibios/_wait.h:
-platforms/chibios/_wait.c:
-quantum/matrix.h:
-platforms/gpio.h:
-platforms/pin_defs.h:
-platforms/chibios/_pin_defs.h:
-platforms/chibios/vendors/RP/_pin_defs.h:
-platforms/chibios/gpio.h:
 quantum/keyboard.h:
 platforms/timer.h:
 platforms/chibios/_timer.h:
-quantum/keymap_common.h:
-quantum/quantum_keycodes.h:
-quantum/keycodes.h:
-quantum/keymap_extras/keymap_us.h:
-quantum/sequencer/sequencer.h:
-quantum/quantum_keycodes_legacy.h:
-quantum/keycode_config.h:
+platforms/wait.h:
+platforms/chibios/_wait.h:
+platforms/chibios/chibios_config.h:
+platforms/chibios/_wait.c:
 quantum/eeconfig.h:
 platforms/eeprom.h:
 quantum/util.h:
 quantum/bits.h:
 quantum/bitwise.h:
 platforms/chibios/_util.h:
-quantum/keycode.h:
-quantum/modifiers.h:
-quantum/action_code.h:
-quantum/action_layer.h:
-quantum/action.h:
-platforms/progmem.h:
 platforms/bootloader.h:
-quantum/sync_timer.h:
-platforms/atomic_util.h:
-platforms/chibios/atomic_util.h:
-tmk_core/protocol/host.h:
-tmk_core/protocol/report.h:
-quantum/digitizer_driver.h:
-drivers/sensors/procyon.h:
-tmk_core/protocol/host_driver.h:
-quantum/led.h:
-quantum/action_util.h:
-quantum/action_tapping.h:
-quantum/logging/print.h:
-quantum/logging/sendchar.h:
-lib/printf/src/printf/printf.h:
-quantum/logging/debug.h:
-platforms/suspend.h:
-quantum/bootmagic/bootmagic.h:
-quantum/process_keycode/process_space_cadet.h:
-quantum/send_string/send_string.h:
-quantum/send_string/send_string_keycodes.h:
-quantum/dynamic_keymap.h:
-quantum/digitizer.h:
-quantum/via.h:
-quantum/pointing_device/pointing_device.h:
-quantum/mousekey.h:
-quantum/tri_layer.h:
-keyboards/ploopyco/ploopyco.h:
