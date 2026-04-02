@@ -14,8 +14,8 @@
 // If enabled, the stylus will automatically be detected if the touch is small and round.
 // #define DIGITIZER_HAS_STYLUS yes
 
-#define MXT_SENSOR_WIDTH_MM 156
-#define MXT_SENSOR_HEIGHT_MM 99
+#define MXT_SENSOR_WIDTH_MM 312
+#define MXT_SENSOR_HEIGHT_MM 198
 
 // TODO: Tweak these if the sensor tracks poorly
 #define MXT_TOUCH_THRESHOLD 24
